@@ -1,0 +1,8 @@
+node_modules/
+public/voice.wav
+public/score.wav
+.remotion/
+*.log
+reels/*/check.jpg
+reels/*/ref/analysis/
+# reels/<naam>/*.mp4 are committed on purpose so they can be downloaded from GitHub on a phone.

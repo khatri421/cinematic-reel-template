@@ -1,0 +1,32 @@
+{
+  "key": "D",
+  "music": [
+    { "type": "tanpura", "from": 0, "to": "end", "gain": 0.045 },
+    { "type": "pad", "scene": 1, "from": 0, "to": 3.5, "chord": "minor", "gain": 0.1, "cutoff": [220, 400] },
+    { "type": "pad", "scene": 4, "from": 0, "to": 7, "chord": "minor", "gain": 0.13, "cutoff": [400, 1500] },
+    { "type": "dhol", "scene": 4, "from": 0, "to": 3.2, "bpm": 150, "pattern": "DttDttDt", "gain": 0.8 },
+    { "type": "roll", "scene": 6, "from": 0, "to": 0.9, "gain": 0.7 },
+    { "type": "choir", "scene": 9, "from": 0, "to": "end", "chord": "major", "gain": 0.12 },
+    { "type": "pad", "scene": 9, "from": 0, "to": 4, "chord": "major", "gain": 0.14, "cutoff": [1400, 900] },
+    { "type": "shankh", "scene": 10, "at": 0, "len": 2.2, "gain": 0.55 },
+    { "type": "dha", "scene": 10, "word": "jai" }, { "type": "ta", "scene": 10, "word": "jai", "gain": 0.7 },
+    { "type": "dha", "scene": 10, "word": "shri", "gain": 0.9 },
+    { "type": "dha", "scene": 10, "word": "ram", "gain": 1.1 },
+    { "type": "bell", "scene": 3, "at": 0.15, "gain": 0.12 }
+  ],
+  "sfx": [
+    { "type": "fire", "from": 0, "to": "end", "curve": [[0, 0.1], [1.2, 0.3], [6, 0.6], [9, 1], [13, 0.4], [17, 0.15]] },
+    { "type": "whoomp", "scene": 1, "word": "aag", "gain": 0.9 },
+    { "type": "crowd", "scene": 2, "from": 0, "to": "end", "gain": 0.25 },
+    { "type": "whoosh", "scene": 4, "at": 0, "len": 1.3, "gain": 0.55 },
+    { "type": "thud", "scene": 5, "at": 0.1, "gain": 0.7 },
+    { "type": "whoomp", "scene": 5, "word": "aag", "gain": 0.6, "pan": 0.4 },
+    { "type": "riser", "scene": 6, "from": 0, "to": 0.9 },
+    { "type": "boom", "scene": 6, "word": "jal" },
+    { "type": "boom", "scene": 7, "word": "jal", "gain": 0.7 },
+    { "type": "whoosh", "scene": 8, "at": 0, "len": 0.8, "gain": 0.5, "panFrom": -0.6, "panTo": 0.3 },
+    { "type": "splash", "scene": 8, "at": "55%", "gain": 0.8 },
+    { "type": "waves", "scene": 8, "from": 0, "to": "end", "gain": 0.3 },
+    { "type": "shimmer", "scene": 9, "at": 0, "len": 1.5, "gain": 0.25 }
+  ]
+}
