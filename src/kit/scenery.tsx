@@ -28,26 +28,61 @@ export const Ground: React.FC<{ y: number; top: string; bottom: string; haze?: s
   );
 };
 
-/** Faceted mountain range (toon-shaded, lit side + dark side). snow = white caps (Kailash, Himalaya). */
-export const Mountains: React.FC<{ y: number; h: number; color: string; dark: string; rim?: string; snow?: boolean; lit?: number; seed?: string; n?: number }> = ({ y, h, color, dark, rim, snow, lit = -1, seed = "m", n = 5 }) => (
-  <g>
-    {Array.from({ length: n }).map((_, i) => {
-      const cx = -120 + (i + 0.5) * ((W + 240) / n) + (random(`${seed}${i}`) - 0.5) * 80;
-      const ph = h * (0.6 + random(`${seed}h${i}`) * 0.55), hw = ph * (0.75 + random(`${seed}w${i}`) * 0.4);
-      const px = cx + (random(`${seed}p${i}`) - 0.5) * hw * 0.3, top = y - ph;
-      const litX = lit < 0 ? cx - hw : cx + hw;
-      return (
-        <g key={i}>
-          <path d={`M${cx - hw},${y} L${px},${top} L${cx + hw},${y}Z`} fill={color} stroke={INK} strokeWidth={2} strokeLinejoin="round" />
-          <path d={`M${px},${top} L${lit < 0 ? cx + hw : cx - hw},${y} L${px + (lit < 0 ? 8 : -8)},${y}Z`} fill={dark} opacity={0.8} />
-          <path d={`M${px},${top} L${px - 14},${top + ph * 0.35} L${px + 6},${top + ph * 0.55} L${px - 4},${y}`} stroke={dark} strokeWidth={1.4} fill="none" opacity={0.6} />
-          {snow && <path d={`M${px},${top} L${px - hw * 0.22},${top + ph * 0.22} l${hw * 0.08},-6 l${hw * 0.07},10 l${hw * 0.08},-8 l${hw * 0.1},${6} L${px + hw * 0.24},${top + ph * 0.24}Z`} fill="#f6f2ff" stroke={INK} strokeWidth={1.2} strokeLinejoin="round" />}
-          {rim && <path d={`M${px},${top} L${litX},${y}`} stroke={rim} strokeWidth={2.4} opacity={0.65} />}
-        </g>
-      );
-    })}
-  </g>
-);
+/** Mountain RANGE. Built as one natural, jagged ridge (midpoint displacement) so it never reads as separate
+ *  triangles / pyramids. Shadow falls on every slope that faces away from the light (gullies), the lit slopes get
+ *  a rim, a paler range sits behind for depth, and snow (optional) caps everything above a jagged snow line.
+ *  y = foot of the range, h = height of the tallest peaks, lit = -1 light from the left, 1 from the right. */
+export const Mountains: React.FC<{ y: number; h: number; color: string; dark: string; rim?: string; snow?: boolean; lit?: number; seed?: string; n?: number; back?: boolean }> = ({ y, h, color, dark, rim, snow, lit = -1, seed = "m", n = 4, back = true }) => {
+  type P = { x: number; y: number };
+  const ridge = (sd: string, hh: number, peaks: number): P[] => {
+    const x0 = -280, x1 = W + 280, step = (x1 - x0) / peaks;
+    let pts: P[] = [{ x: x0, y: y - hh * (0.2 + random(`${sd}s`) * 0.15) }];
+    for (let i = 0; i < peaks; i++) {
+      const r = (k: string) => random(`${sd}${k}${i}`);
+      pts.push({ x: x0 + step * (i + 0.25 + r("a") * 0.5), y: y - hh * (0.55 + r("p") * 0.45) });   // peak
+      pts.push({ x: x0 + step * (i + 1), y: y - hh * (0.15 + r("v") * 0.25) });                         // valley
+    }
+    // 4 rounds of midpoint displacement: natural jags, shoulders and notches
+    for (let round = 0; round < 4; round++) {
+      const out: P[] = [pts[0]];
+      for (let j = 1; j < pts.length; j++) {
+        const a = pts[j - 1], b = pts[j], len = Math.hypot(b.x - a.x, b.y - a.y);
+        const d = (random(`${sd}d${round}_${j}`) - 0.5) * len * (0.32 - round * 0.05);
+        out.push({ x: (a.x + b.x) / 2 + (random(`${sd}x${round}_${j}`) - 0.5) * len * 0.08, y: (a.y + b.y) / 2 + d });
+        out.push(b);
+      }
+      pts = out;
+    }
+    return pts.map((p) => ({ x: p.x, y: Math.min(p.y, y - 6) }));
+  };
+  const shape = (pts: P[]) => `M${pts[0].x},${y + 6} ` + pts.map((p) => `L${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ") + ` L${pts[pts.length - 1].x},${y + 6}Z`;
+  const front = ridge(seed, h, n), far = ridge(seed + "b", h * 0.75, n + 2);
+  const away = (a: P, b: P) => (lit < 0 ? b.y > a.y : b.y < a.y); // segment slopes down away from the light
+  let shadow = "", rimD = "";
+  for (let j = 1; j < front.length; j++) {
+    const a = front[j - 1], b = front[j];
+    const depthA = (y - a.y) * 0.55, depthB = (y - b.y) * 0.55;
+    if (away(a, b)) shadow += `M${a.x.toFixed(1)},${a.y.toFixed(1)} L${b.x.toFixed(1)},${b.y.toFixed(1)} L${(b.x - lit * 8).toFixed(1)},${(b.y + depthB).toFixed(1)} L${(a.x - lit * 8).toFixed(1)},${(a.y + depthA).toFixed(1)}Z `;
+    else if (rim && y - Math.min(a.y, b.y) > h * 0.45) rimD += `M${a.x.toFixed(1)},${(a.y + 1.5).toFixed(1)} L${b.x.toFixed(1)},${(b.y + 1.5).toFixed(1)} `;
+  }
+  const clip = `mclip-${seed}`;
+  const snowLine = y - h * 0.6;
+  let snowD = `M-300,${snowLine - h} L${W + 300},${snowLine - h} L${W + 300},${snowLine}`;
+  for (let x = W + 300; x >= -300; x -= 24) snowD += ` L${x},${(snowLine + (random(`${seed}sn${x}`) - 0.3) * 26).toFixed(1)}`;
+  snowD += "Z";
+  return (
+    <g>
+      <defs><clipPath id={clip}><path d={shape(front)} /></clipPath><clipPath id={clip + "s"}><path d={snowD} /></clipPath></defs>
+      {back && <path d={shape(far)} fill={color} opacity={0.42} style={{ filter: "blur(1.5px)" }} />}
+      <path d={shape(front)} fill={color} />
+      <path d={shadow} fill={dark} opacity={0.62} clipPath={`url(#${clip})`} />
+      {snow && <path d={snowD} fill="#f4f0ff" clipPath={`url(#${clip})`} />}
+      {snow && <g clipPath={`url(#${clip})`}><path d={shadow} fill="#a9a2cf" opacity={0.85} clipPath={`url(#${clip}s)`} /></g>}
+      <path d={shape(front)} fill="none" stroke={INK} strokeWidth={2} strokeLinejoin="round" />
+      {rimD && <path d={rimD} stroke={rim} strokeWidth={2.2} fill="none" opacity={0.6} strokeLinecap="round" />}
+    </g>
+  );
+};
 
 /** Folk tree: trunk + clustered canopy with pattern dots. kind: "banyan" (wide), "round", "palm", "kadamb". */
 export const Tree: React.FC<{ x: number; y: number; s?: number; kind?: "banyan" | "round" | "palm" | "kadamb"; leaf: string; leafDark: string; trunk?: string; rim?: string; t?: number; seed?: string; flowers?: string }> = ({ x, y, s = 1, kind = "round", leaf, leafDark, trunk = "#6a3a2a", rim, t = 0, seed = "tr", flowers }) => {

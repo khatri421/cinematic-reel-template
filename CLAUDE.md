@@ -35,7 +35,7 @@ The user is a beginner. Often they work ONLY from a phone (Claude app Code tab +
 4. `npx tsc -p .` must pass.
 
 ## 5. Render order (always)
-1. `npm run preview -- <naam>` → open `reels/<naam>/check.jpg`, check every scene, fix problems and re-render. Then commit `reels/<naam>/preview.mp4` + your source files and push.
+1. `npm run preview -- <naam>` → open `reels/<naam>/check.jpg`, check every scene (including the skill's self-check: nothing may be mistaken for something else, e.g. mountains like pyramids, a crown like a hat, modern or foreign objects), fix problems and re-render. Then commit `reels/<naam>/preview.mp4` + your source files and push.
    Tell the user the exact path: github.com → repo → `reels/<naam>/preview.mp4` → download. Ask: "Preview theek hai? OK bolo to full reel banaun."
 2. ONLY after the user says OK: `npm run reel -- <naam>` → check `check.jpg` → commit `reel.mp4`, push, give the path again.
 - One render at a time. Render prints progress; that is normal. Long reels take 15-30 min in the cloud: tell the user they can close the app.

@@ -22,9 +22,19 @@ The user is a beginner, often on a phone. Talk in short, simple Hinglish, one st
 5. **Build** `src/reels/<naam>.tsx` with `CHIP` + `SCENES` (see `references/kit.md` skeleton and `src/reels/example.tsx`). New world for this story; never paste the example's scenes into another story.
 6. **Sound** (`references/sound-design.md`): write `src/reels/<naam>.sound.json`: bed + ambience + one SFX per visible action, anchored with `scene` + `word` / `%`.
 7. `npx tsc -p .` must pass.
-8. `npm run preview -- <naam>` → **open `reels/<naam>/check.jpg`** (one frame per scene) and check: subject clear and inside frame, nothing under the captions, light source visible, bodies anatomically right (no broken limbs, feet on the ground), the climax on its word. Fix and re-run until it is right, THEN commit + push and tell the user where the preview is.
+8. `npm run preview -- <naam>` → **open `reels/<naam>/check.jpg`** (one frame per scene) and check: subject clear and inside frame, nothing under the captions, light source visible, bodies anatomically right (no broken limbs, feet on the ground), the climax on its word, and **nothing can be mistaken for something else** (see the self-check below). Fix and re-run until it is right, THEN commit + push and tell the user where the preview is.
 9. Changes: do all the user's points in one go, re-run the preview, check again.
 10. On "OK": `npm run reel -- <naam>`, check `check.jpg` again, commit + push, tell the path.
+
+## Self-check: "could a viewer misread anything?"
+Before showing any preview, look at every frame of check.jpg like a viewer who does not know the story, and ask for each object: what does this look like at first glance? If it could be mistaken for something else, fix it, then re-render. Typical traps:
+- mountains that read as pyramids, hills that read as heaps or tents;
+- a crown that reads as a hat or a pot, a gada that reads as a lollipop, a bow that reads as a stick;
+- the wrong era or place: skyscrapers, modern clothes, cars, Egyptian or Greek buildings in a Bharat story;
+- a deity with the wrong iconography (colour, weapon, vahana) or an undignified pose;
+- a character facing away from the one they speak to, floating above the ground, or cut by the frame edge;
+- text, logos or letters that appear inside the art by accident.
+This rule covers every scene and every story, so the user never has to point these out one by one.
 
 ## Style from a reference reel / script
 Follow `references/style-inspiration.md`: `npm run ref -- <naam>`, write `reels/<naam>/style.txt` (STYLE CARD with ~60-70% of the reference's style DNA and a stated 30-40% of our own), then build with it. For scripts: SCRIPT DNA table + a new script, overlap check (no 4+ consecutive words from the reference).
