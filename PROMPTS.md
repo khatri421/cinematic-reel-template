@@ -93,6 +93,22 @@ Ab is script ki ek-ek line check karo:
 Galti mile to sahi karke poori script dobara do (dono roop mein).
 ```
 
+## PROMPT 4A · AASAAN TAREEKA (AWAAZ CHAT MEIN)
+**Kahan:** Code tab, naya session + MP3 attach
+
+```text
+Is message ke saath meri awaaz ki MP3 file attach hai. Is reel ka naam karna-kavach rakho.
+Awaaz ko reels/karna-kavach/ folder mein save karo, aur neeche wali script ko usi
+folder mein script.txt bana ke save karo (shabd bilkul mat badalna).
+Phir CLAUDE.md ke niyam aur cinematic-reel skill follow karke cinematic 2.5D reel banao.
+Environment settings mat badalna, zaroorat ho to bash setup.sh chalao. Pehle scene plan
+dikhao, phir sirf 15 second ka preview banao, check.jpg dekh ke galtiyan theek karo,
+commit + push karo aur batao preview kahan hai. Poori reel abhi mat banana.
+
+Script:
+[yahan apni (B) Hinglish script paste karo]
+```
+
 ## PROMPT 4 · NAYI REEL KA PREVIEW
 **Kahan:** Code tab, har reel ke liye
 
